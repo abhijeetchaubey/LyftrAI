@@ -1,6 +1,8 @@
+
 import axios from 'axios';
 
-const baseURL = import.meta.env.VITE_API_URL || '/api';
+const baseURL =
+  import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 const api = axios.create({
   baseURL,
@@ -12,9 +14,11 @@ const api = axios.create({
 
 export const postChat = async (payload, simulateFailureHeader = null) => {
   const headers = {};
-  if (simulateFailureHeader && simulateFailureHeader.trim()) {
+
+  if (simulateFailureHeader?.trim()) {
     headers['X-Simulate-Failure'] = simulateFailureHeader.trim();
   }
+
   const response = await api.post('/chat', payload, { headers });
   return response.data;
 };
@@ -25,7 +29,9 @@ export const getHealth = async () => {
 };
 
 export const getSessionMessages = async (sessionId) => {
-  const response = await api.get(`/sessions/${encodeURIComponent(sessionId)}/messages`);
+  const response = await api.get(
+    `/sessions/${encodeURIComponent(sessionId)}/messages`
+  );
   return response.data;
 };
 
